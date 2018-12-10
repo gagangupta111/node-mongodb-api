@@ -7,13 +7,13 @@ var user = {
     address: 'young'
 };
 
-// crudOp.addUser(user);
+crudOp.addUser(user);
 
 // crudOp.deleteOneWithName('User1');
 // crudOp.deleteManyWithName('User1');
 // crudOp.findOneAndDelete('User1');
 
-crudOp.findOneUpdateNameIncAge('User1');
+// crudOp.findOneUpdateNameIncAge('User1');
 
 // crudOp.findAllUsersCount();
 // var users = crudOp.findAllUsers();

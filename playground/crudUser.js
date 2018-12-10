@@ -9,17 +9,16 @@ const addUser = (user) => {
     client.connect(err => {
         if(err){
             return console.log('Unable to connect to mongodb database.');
-        }
-        
+        }        
         const db = client.db('db1');
         const collection = db.collection('users');
 
-        collection.insertOne(user, (err, result) => {
-            if(err){
-                console.log('Unable to insert documents');
-            }
-
-            console.log(result.ops);
+        collection.insertOne(user)
+        .then((res) => {
+            console.log(res.ops);
+        })
+        .catch( (err) => {
+                console.log('Unable to insert documents', err);
         });
 
         client.close();
