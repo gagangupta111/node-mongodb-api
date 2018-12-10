@@ -213,11 +213,50 @@ const deleteManyWithName = (userName) => {
     return users;
 };
 
+const findOneUpdateNameIncAge = (userName) => {
+    var users = 
+     client.connect(err => {
+        if(err){
+            return console.log('Unable to connect to mongodb database.');
+        }
+        
+        const db = client.db('db1');
+        const collection = db.collection('users');
+
+        collection.findOneAndUpdate({
+            name: userName
+        }, {
+            $set: {
+                name : 'gagan gupta'
+            },
+            $inc: {
+                age: 1
+            }
+        },
+        {
+            returnOriginal: false
+        })
+        .then((docs) => {
+            console.log('Updated docs', docs);
+            return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to update docs', err);
+            return undefined;
+        });
+
+        client.close();
+    });
+    return users;
+};
+
 module.exports.addUser = addUser;
 
 module.exports.deleteOneWithName = deleteOneWithName;
 module.exports.deleteManyWithName = deleteManyWithName;
 module.exports.findOneAndDelete = findOneAndDelete;
+
+module.exports.findOneUpdateNameIncAge = findOneUpdateNameIncAge;
 
 module.exports.findAllUsers = findAllUsers;
 module.exports.findAllUsersWithName = findAllUsersWithName;
