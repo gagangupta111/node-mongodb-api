@@ -8,9 +8,9 @@ var user = {
     address: 'young'
 };
 
+crudOp.findAllUsersCount();
 
-var users = crudOp.findAllUsers();
-
+// var users = crudOp.findAllUsers();
 // crudOp.findAllUsersWithName('gagan gupta');
 // crudOp.findAllUsersWithObjectID('5c0d8b3887912398ea87a66f');
 

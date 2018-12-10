@@ -52,6 +52,31 @@ const findAllUsers = () => {
     return users;
 };
 
+const findAllUsersCount = () => {
+    var users = 
+     client.connect(err => {
+        if(err){
+            return console.log('Unable to connect to mongodb database.');
+        }
+        
+        const db = client.db('db1');
+        const collection = db.collection('users');
+
+        collection.find().count()
+        .then((docs) => {
+            console.log('got docs', docs);
+            return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to fetch docs', err);
+            return undefined;
+        });
+
+        client.close();
+    });
+    return users;
+};
+
 const findAllUsersWithName = (username) => {
     var users = 
      client.connect(err => {
@@ -192,3 +217,4 @@ module.exports.findAllUsers = findAllUsers;
 module.exports.deleteUser = deleteUser;
 module.exports.findAllUsersWithName = findAllUsersWithName;
 module.exports.findAllUsersWithObjectID = findAllUsersWithObjectID;
+module.exports.findAllUsersCount = findAllUsersCount;
