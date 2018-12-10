@@ -14,19 +14,38 @@ const client = moongose.connect(uri, { useNewUrlParser: true })
 
 var UserModel = moongose.model('User', {
     name: {
-        type: String
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+        default: "User0"
     },
     age: {
-        type: Number
+        type: Number,
+        required: true,
+        minlength: 1,
+        default: 0
     },
     title: {
-        type: String
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+        default: "title0"
     },
     address: {
-        type: String
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+        default: "address0"
     },
     book: {
-        type: String
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+        default: "book0"
     }
 },  "users" );
 
