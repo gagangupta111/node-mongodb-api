@@ -1,99 +1,36 @@
-var moongose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const uri = "mongodb+srv://user1:Admin@123@cluster0-79m7r.mongodb.net/db1";
+const {BookModel} = require('../models/book');
+const {UserModel} = require('../models/user');
+const {moongose} = require('../db/mongoose');
 
-moongose.Promise = global.Promise;
+const app = express();
 
-const client = moongose.connect(uri, { useNewUrlParser: true })
-    .then( (res) => {
-        console.log('Connected');
-    })
-    .catch( (err) => {
-        console.log('error:', err);
-    });
+app.use(bodyParser.json())
 
-var UserModel = moongose.model('User', {
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 1
-    },
-    age: {
-        type: Number,
-        required: true,
-        minlength: 1
-    },
-    title: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 1,
-        default: "title0"
-    },
-    address: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 1,
-        default: "address0"
-    },
-    book: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 1
-    }
-},  "users" );
-
-var BookModel = moongose.model('Book', {
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 1
-    },
-    title: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 1
-    },
-    ISBN: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 1
-    }
-},  "books" );
-
-var user1 = new UserModel({
-    name : 'User1',
-    age : 19,
-    title: 'student',
-    address: 'young',
-    book: 'book9'
+app.listen(3000, () => {
+    console.log('Started on port 3000');
 });
 
-var book1 = new BookModel({
-    name : 'Book1',
-    title: 'title1',
-    ISBN: 'ISBN-7687-87687-jhg7'
+app.post('/users', (req, res) => {
+    
+    console.log('req:', req.body);
+
+    var user = new UserModel({
+        name: req.body.name,
+        age: req.body.age,
+        title: req.body.title,
+        address: req.body.address,
+        book: req.body.book
+    });
+
+    user.save()
+        .then( (result) => {
+            res.status(201).send(result);
+        })
+        .catch( (error) => {
+            res.status(400).send(error);
+        });
 });
-
-user1.save()
-    .then( (res) => {
-        console.log('Saved user1', res);
-    })
-    .catch( (err) => {
-        console.log('Unable to Save user1', err);
-    });
-
-book1.save()
-    .then( (res) => {
-        console.log('Saved book', res);
-    })
-    .catch( (err) => {
-        console.log('Unable to Save book1', err);
-    });
 
