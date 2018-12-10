@@ -1,7 +1,7 @@
 const {MongoClient, ObjectID} = require('mongodb');
 const assert = require('assert');
 
-const uri = "mongodb+srv://user1:Admin@123@cluster0-79m7r.mongodb.net/test?retryWrites=true";
+const uri = "mongodb+srv://user1:Admin@123@cluster0-79m7r.mongodb.net";
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
 const addUser = (user) => {
