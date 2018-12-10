@@ -17,14 +17,12 @@ var UserModel = moongose.model('User', {
         type: String,
         required: true,
         trim: true,
-        minlength: 1,
-        default: "User0"
+        minlength: 1
     },
     age: {
         type: Number,
         required: true,
-        minlength: 1,
-        default: 0
+        minlength: 1
     },
     title: {
         type: String,
@@ -44,16 +42,43 @@ var UserModel = moongose.model('User', {
         type: String,
         required: true,
         trim: true,
-        minlength: 1,
-        default: "book0"
+        minlength: 1
     }
 },  "users" );
+
+var BookModel = moongose.model('Book', {
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1
+    },
+    title: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1
+    },
+    ISBN: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1
+    }
+},  "books" );
 
 var user1 = new UserModel({
     name : 'User1',
     age : 19,
     title: 'student',
-    address: 'young'
+    address: 'young',
+    book: 'book9'
+});
+
+var book1 = new BookModel({
+    name : 'Book1',
+    title: 'title1',
+    ISBN: 'ISBN-7687-87687-jhg7'
 });
 
 user1.save()
@@ -62,5 +87,13 @@ user1.save()
     })
     .catch( (err) => {
         console.log('Unable to Save user1', err);
+    });
+
+book1.save()
+    .then( (res) => {
+        console.log('Saved book', res);
     })
+    .catch( (err) => {
+        console.log('Unable to Save book1', err);
+    });
 
