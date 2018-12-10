@@ -1,4 +1,4 @@
-const MongoClient = require('mongodb').MongoClient;
+const {MongoClient, ObjectID} = require('mongodb');
 const assert = require('assert');
 
 const uri = "mongodb+srv://user1:Admin@123@cluster0-79m7r.mongodb.net/test?retryWrites=true";
@@ -19,7 +19,7 @@ const addUser = (user) => {
                 console.log('Unable to insert documents');
             }
 
-            console.log(JSON.stringify(result.ops));
+            console.log(result.ops);
         });
 
         client.close();
@@ -28,8 +28,8 @@ const addUser = (user) => {
 };
 
 const findAllUsers = () => {
-
-    client.connect(err => {
+    var users = 
+     client.connect(err => {
         if(err){
             return console.log('Unable to connect to mongodb database.');
         }
@@ -37,16 +37,76 @@ const findAllUsers = () => {
         const db = client.db('db1');
         const collection = db.collection('users');
 
-        collection.find({}).toArray((err, docs) => {
-            assert.equal(err, null);
+        collection.find().toArray()
+        .then((docs) => {
+            console.log('got docs', docs);
             return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to fetch docs', err);
+            return undefined;
         });
 
         client.close();
     });
+    return users;
 };
 
-const updateUser = (user) => {
+const findAllUsersWithName = (username) => {
+    var users = 
+     client.connect(err => {
+        if(err){
+            return console.log('Unable to connect to mongodb database.');
+        }
+        
+        const db = client.db('db1');
+        const collection = db.collection('users');
+
+        collection.find({
+            name: username
+        }).toArray()
+        .then((docs) => {
+            console.log('got docs', docs);
+            return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to fetch docs', err);
+            return undefined;
+        });
+
+        client.close();
+    });
+    return users;
+};
+
+const findAllUsersWithObjectID = (id) => {
+    var users = 
+     client.connect(err => {
+        if(err){
+            return console.log('Unable to connect to mongodb database.');
+        }
+        
+        const db = client.db('db1');
+        const collection = db.collection('users');
+
+        collection.find({
+            _id: new ObjectID(id)
+        }).toArray()
+        .then((docs) => {
+            console.log('got docs', docs);
+            return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to fetch docs', err);
+            return undefined;
+        });
+
+        client.close();
+    });
+    return users;
+};
+
+const updateUser = (condition, field) => {
 
     client.connect(err => {
         if(err){
@@ -56,12 +116,14 @@ const updateUser = (user) => {
         const db = client.db('db1');
         const collection = db.collection('users');
 
-        collection.updateOne(user, (err, result) => {
+        collection.updateOne(condition, { $set: field }, function(err, result) {
+            
             if(err){
-                console.log('Unable to insert documents');
+                return console.log('Unable to insert documents');
             }
 
-            console.log(JSON.stringify(result.ops));
+            console.log(JSON.stringify(result));
+
         });
 
         client.close();
@@ -84,7 +146,7 @@ const deleteUser = (user) => {
                 console.log('Unable to insert documents');
             }
 
-            console.log(JSON.stringify(result.ops));
+            console.log(JSON.stringify(result));
         });
 
         client.close();
@@ -92,39 +154,41 @@ const deleteUser = (user) => {
     });
 };
 
-client.connect(err => {
-    if(err){
-        return console.log('Unable to connect to mongodb database.');
-    }
+// client.connect(err => {
+//     if(err){
+//         return console.log('Unable to connect to mongodb database.');
+//     }
 
-    const db = client.db('db1');
-    const collection = db.collection('users');
+//     const db = client.db('db1');
+//     const collection = db.collection('users');
 
-    collection.find({}).toArray(function(err, docs) {
-        assert.equal(err, null);
-        console.log("Found the following records");
-        console.log(docs);
-      });
+//     collection.find({}).toArray(function(err, docs) {
+//         assert.equal(err, null);
+//         console.log("Found the following records");
+//         console.log(docs);
+//       });
 
-    console.log(collection.dbName);
+//     console.log(collection.dbName);
 
-    collection.insertOne({
-        name: "C V Raman ",
-        age : 23,
-        firstName: "C V",
-        lastName: "Raman"
-    }, (err, result) => {
-        if(err){
-            console.log('Unable to insert documents');
-        }
+//     collection.insertOne({
+//         name: "C V Raman ",
+//         age : 23,
+//         firstName: "C V",
+//         lastName: "Raman"
+//     }, (err, result) => {
+//         if(err){
+//             console.log('Unable to insert documents');
+//         }
 
-        console.log(JSON.stringify(result.ops));
-    });
+//         console.log(JSON.stringify(result.ops));
+//     });
 
-    client.close();
-});
+//     client.close();
+// });
 
 module.exports.addUser = addUser;
 module.exports.updateUser = updateUser;
 module.exports.findAllUsers = findAllUsers;
 module.exports.deleteUser = deleteUser;
+module.exports.findAllUsersWithName = findAllUsersWithName;
+module.exports.findAllUsersWithObjectID = findAllUsersWithObjectID;

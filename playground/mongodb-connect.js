@@ -1,10 +1,10 @@
 const crudOp = require('./crudUser');
 
 var user = {
-    name : 'Dr. manhattan',
-    age : 29,
-    title: 'doctor',
-    address: 'Awakened World'
+    name : 'User1',
+    age : 19,
+    title: 'student',
+    address: 'young'
 };
 
 crudOp.addUser(user);
@@ -17,10 +17,9 @@ users = crudOp.findAllUsers();
 console.log('After delete all users', users);
 
 crudOp.updateUser({
-        name : 'Dr. manhattan'
-    }, 
-    {
-        book: 'New World Order'
+        name : 'User1'
+    }, {
+        book: 'book1'
     });
 users = crudOp.findAllUsers();
 console.log('After delete all users', users);
