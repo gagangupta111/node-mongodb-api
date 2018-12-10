@@ -131,9 +131,10 @@ const findAllUsersWithObjectID = (id) => {
     return users;
 };
 
-const updateUser = (condition, field) => {
 
-    client.connect(err => {
+const deleteOneWithName = (userName) => {
+    var users = 
+     client.connect(err => {
         if(err){
             return console.log('Unable to connect to mongodb database.');
         }
@@ -141,24 +142,26 @@ const updateUser = (condition, field) => {
         const db = client.db('db1');
         const collection = db.collection('users');
 
-        collection.updateOne(condition, { $set: field }, function(err, result) {
-            
-            if(err){
-                return console.log('Unable to insert documents');
-            }
-
-            console.log(JSON.stringify(result));
-
+        collection.deleteOne({
+            name: userName
+        })
+        .then((docs) => {
+            console.log('deleted docs', docs);
+            return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to delete docs', err);
+            return undefined;
         });
 
         client.close();
-        return true;
     });
+    return users;
 };
 
-const deleteUser = (user) => {
-
-    client.connect(err => {
+const findOneAndDelete = (userName) => {
+    var users = 
+     client.connect(err => {
         if(err){
             return console.log('Unable to connect to mongodb database.');
         }
@@ -166,55 +169,57 @@ const deleteUser = (user) => {
         const db = client.db('db1');
         const collection = db.collection('users');
 
-        collection.deleteOne(user, (err, result) => {
-            if(err){
-                console.log('Unable to insert documents');
-            }
-
-            console.log(JSON.stringify(result));
+        collection.findOneAndDelete({
+            name: userName
+        })
+        .then((docs) => {
+            console.log('deleted docs', docs);
+            return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to delete docs', err);
+            return undefined;
         });
 
         client.close();
-        return true;
     });
+    return users;
 };
 
-// client.connect(err => {
-//     if(err){
-//         return console.log('Unable to connect to mongodb database.');
-//     }
+const deleteManyWithName = (userName) => {
+    var users = 
+     client.connect(err => {
+        if(err){
+            return console.log('Unable to connect to mongodb database.');
+        }
+        
+        const db = client.db('db1');
+        const collection = db.collection('users');
 
-//     const db = client.db('db1');
-//     const collection = db.collection('users');
+        collection.deleteMany({
+            name: userName
+        })
+        .then((docs) => {
+            console.log('deleted docs', docs);
+            return docs;
+        })
+        .catch((err) => {
+            console.log('Unable to delete docs', err);
+            return undefined;
+        });
 
-//     collection.find({}).toArray(function(err, docs) {
-//         assert.equal(err, null);
-//         console.log("Found the following records");
-//         console.log(docs);
-//       });
-
-//     console.log(collection.dbName);
-
-//     collection.insertOne({
-//         name: "C V Raman ",
-//         age : 23,
-//         firstName: "C V",
-//         lastName: "Raman"
-//     }, (err, result) => {
-//         if(err){
-//             console.log('Unable to insert documents');
-//         }
-
-//         console.log(JSON.stringify(result.ops));
-//     });
-
-//     client.close();
-// });
+        client.close();
+    });
+    return users;
+};
 
 module.exports.addUser = addUser;
-module.exports.updateUser = updateUser;
+
+module.exports.deleteOneWithName = deleteOneWithName;
+module.exports.deleteManyWithName = deleteManyWithName;
+module.exports.findOneAndDelete = findOneAndDelete;
+
 module.exports.findAllUsers = findAllUsers;
-module.exports.deleteUser = deleteUser;
 module.exports.findAllUsersWithName = findAllUsersWithName;
 module.exports.findAllUsersWithObjectID = findAllUsersWithObjectID;
 module.exports.findAllUsersCount = findAllUsersCount;

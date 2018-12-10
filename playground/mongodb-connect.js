@@ -23,5 +23,3 @@ crudOp.updateUser({
     });
 users = crudOp.findAllUsers();
 console.log('After delete all users', users);
-
-
