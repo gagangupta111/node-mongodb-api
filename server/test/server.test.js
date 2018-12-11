@@ -37,10 +37,10 @@ describe('POST /check', () => {
 
 
 describe('POST /dummyUsers', () => {
-   
+
     beforeEach(function(done) {
-        this.timeout(3000); // A very long environment setup.
-        setTimeout(done, 2500);
+        this.timeout(5000); // A very long environment setup.
+        setTimeout(done, 4500);
       });
 
     var dummyUser = {
@@ -156,12 +156,20 @@ describe('GET /users', () => {
 
 describe('GET /users/id', () => {
 
-    const id  = '5c0fd25fbd1ed4d70afdebbf';
-
     beforeEach(function(done) {
         this.timeout(3000); // A very long environment setup.
         setTimeout(done, 2500);
       });
+
+    var id;
+
+    request(app)
+    .get('/users')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .then((res) => {
+        id = res.body[0]._id;
+    });
 
     it('should get a user', (done) => {
 
@@ -188,8 +196,62 @@ describe('GET /users/id', () => {
     });
 });
 
+describe('UPDATE /users/id', () => {
+
+    beforeEach(function(done) {
+        this.timeout(3000); // A very long environment setup.
+        setTimeout(done, 2500);
+      });
+
+    var id;
+
+    request(app)
+    .get('/users')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .then((res) => {
+        id = res.body[0]._id;
+    });
+
+    var update = {
+        "age" : 74,
+        "title": "teacher74"
+    };
+
+
+    it('should update a user by id', (done) => {
+
+        console.log('should update a user by id', id);
+        request(app)
+            .patch('/users/' + id)
+            .set('Accept', 'application/json')
+            .send(update)
+            .expect(200)
+            .expect(function(res) {
+                console.log(' users function(res) ');
+                console.log('res:', res.body);
+                console.log('users res.body passed');
+                expect(res.body._id).toBe(id);
+            })
+            .end(done);
+    });
+
+    it('should not get any user for updation by this id', (done) => {
+
+        request(app)
+            .get('/users/' + '5c0fd25fbd1ed4d70a')
+            .set('Accept', 'application/json')
+            .expect(400)
+            .end(done);
+    });
+});
 
 describe('DELETE /users/id', () => {
+
+    beforeEach(function(done) {
+        this.timeout(3000); // A very long environment setup.
+        setTimeout(done, 2500);
+      });
 
     var id;
 
@@ -203,6 +265,7 @@ describe('DELETE /users/id', () => {
 
     it('should delete a user by id', (done) => {
 
+        console.log('should delete a user by id', id);
         request(app)
             .delete('/users/' + id)
             .set('Accept', 'application/json')
@@ -225,4 +288,3 @@ describe('DELETE /users/id', () => {
             .end(done);
     });
 });
-

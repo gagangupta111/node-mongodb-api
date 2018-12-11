@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 
 const {BookModel} = require('../models/book');
 const {UserModel} = require('../models/user');
@@ -47,7 +48,8 @@ app.get('/users', (req, res) => {
 });
 
 app.get('/users/:id', (req, res) => {
-    
+
+    console.log('get /users/:id called');
     if(!isValidID(req.params.id)){
         console.log('/users/:id not valid id');
         return res.status(400).send({
@@ -67,7 +69,8 @@ app.get('/users/:id', (req, res) => {
 });
 
 app.delete('/users/:id', (req, res) => {
-    
+
+    console.log('delete /users/:id called');
     if(!isValidID(req.params.id)){
         console.log('/users/:id not valid id');
         return res.status(400).send({
@@ -76,6 +79,43 @@ app.delete('/users/:id', (req, res) => {
     }
 
     UserModel.findByIdAndRemove(req.params.id)
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
+app.delete('/deleteAll', (req, res) => {
+
+    console.log('deleteAllcalled');
+
+    UserModel.deleteMany({})
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
+app.patch('/users/:id', (req, res) => {
+
+    console.log('patch /users/:id called');
+    if(!isValidID(req.params.id)){
+        console.log('/users/:id not valid id');
+        return res.status(400).send({
+            error: 'Invalid ID' + req.params.id
+        });
+    }
+
+    var body = _.pick(req.body, ['age', 'title']);
+    UserModel.findOneAndUpdate(req.params.id, {$set : body}, {new : true})
         .then( (result) => {
             console.log('found result:');
             res.status(200).send(result);
@@ -193,7 +233,7 @@ app.post('/dummyUsers', (req, res) => {
 
 const isValidID = (id) => {
     if(!ObjectID.isValid(id)){
-        console.log('Not Valid ID');
+        console.log('Not Valid ID:', id);
         return false;
     }
     return true;
