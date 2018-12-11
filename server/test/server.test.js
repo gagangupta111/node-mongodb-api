@@ -77,9 +77,17 @@ describe('POST /dummyUsers', () => {
 
                 UserModel.find()
                     .then( (users) => {
-                        console.log('users:', users);
-                        done();
-                    })
+                        for(var i = 0; i < users.length; i++) {
+                            var obj = users[i];
+                            console.log('obj:', obj, ' user1 ', user1);
+                            try{
+                                expect(obj).toMatchObject(user1);
+                                return done();
+                                }catch(e){}
+                            }
+                            throw new Error('No user1 found in returned array of users');
+                        }
+                    )
                     .catch( (err) => {
                         return done(err);
                     });
