@@ -25,12 +25,40 @@ app.post('/users', (req, res) => {
         book: req.body.book
     });
 
+    console.log('user:' , user);
+
     user.save()
         .then( (result) => {
-            res.status(201).send(result);
+            console.log('saved result:', result);
+            res.status(200).send(result);
         })
         .catch( (error) => {
+            console.log('found error:', error);
             res.status(400).send(error);
         });
 });
 
+app.post('/dummyUsers', (req, res) => {
+    
+    var user = new UserModel({
+        name: 'name',
+        age: 20,
+        title: 'title1',
+        address: 'address',
+        book: 'book1'
+    });
+
+    console.log('user:' , user);
+
+    user.save()
+        .then( (result) => {
+            console.log('saved result:', result);
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
+module.exports.app = app;
