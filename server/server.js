@@ -66,6 +66,26 @@ app.get('/users/:id', (req, res) => {
         });
 });
 
+app.delete('/users/:id', (req, res) => {
+    
+    if(!isValidID(req.params.id)){
+        console.log('/users/:id not valid id');
+        return res.status(400).send({
+            error: 'Invalid ID'
+        });
+    }
+
+    UserModel.findByIdAndRemove(req.params.id)
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
 app.get('/findById', (req, res) => {
     
     if(!isValidID(req.body._id)){

@@ -188,3 +188,41 @@ describe('GET /users/id', () => {
     });
 });
 
+
+describe('DELETE /users/id', () => {
+
+    var id;
+
+    request(app)
+    .get('/users')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .then((res) => {
+        id = res.body[0]._id;
+    });
+
+    it('should delete a user by id', (done) => {
+
+        request(app)
+            .delete('/users/' + id)
+            .set('Accept', 'application/json')
+            .expect(200)
+            .expect(function(res) {
+                console.log(' users function(res) ');
+                console.log('res:', res.body);
+                console.log('users res.body passed');
+                expect(res.body._id).toBe(id);
+            })
+            .end(done);
+    });
+
+    it('should not get any user for deletion by this id', (done) => {
+
+        request(app)
+            .get('/users/' + '5c0fd25fbd1ed4d70a')
+            .set('Accept', 'application/json')
+            .expect(400)
+            .end(done);
+    });
+});
+
