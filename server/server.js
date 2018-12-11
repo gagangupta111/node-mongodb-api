@@ -1,3 +1,14 @@
+const env = process.env.NODE_ENV || 'developement';
+console.log('env ==================', env);
+
+if(env === 'developement'){
+    process.env.PORT = 3000;
+    process.env.MONGODB_URI =  "mongodb+srv://user1:Admin@123@cluster0-79m7r.mongodb.net/db1";
+}else if(env === 'test'){
+    process.env.PORT = 3000;
+    process.env.MONGODB_URI =  "mongodb+srv://user1:Admin@123@cluster0-79m7r.mongodb.net/test";
+}
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
