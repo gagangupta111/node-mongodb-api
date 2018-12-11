@@ -183,7 +183,7 @@ describe('GET /users/id', () => {
         request(app)
             .get('/users/' + '5c0fd25fbd1ed4d70a')
             .set('Accept', 'application/json')
-            .expect(404)
+            .expect(400)
             .end(done);
     });
 });

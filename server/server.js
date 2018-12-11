@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const {BookModel} = require('../models/book');
 const {UserModel} = require('../models/user');
 const {moongose} = require('../db/mongoose');
+const {ObjectID} = require('mongodb');
 
 const app = express();
 
@@ -47,6 +48,13 @@ app.get('/users', (req, res) => {
 
 app.get('/users/:id', (req, res) => {
     
+    if(!isValidID(req.params.id)){
+        console.log('/users/:id not valid id');
+        return res.status(400).send({
+            error: 'Invalid ID'
+        });
+    }
+
     UserModel.findById(req.params.id)
         .then( (result) => {
             console.log('found result:');
@@ -60,6 +68,13 @@ app.get('/users/:id', (req, res) => {
 
 app.get('/findById', (req, res) => {
     
+    if(!isValidID(req.body._id)){
+        console.log('/users/:id not valid id');
+        return res.status(400).send({
+            error: 'Invalid ID'
+        });
+    }
+
     UserModel.findById(req.body._id)
         .then( (result) => {
             console.log('found result:');
@@ -88,6 +103,13 @@ app.get('/findByName', (req, res) => {
 
 app.get('/userById', (req, res) => {
     
+    if(!isValidID(req.params._id)){
+        console.log('/users/:id not valid id');
+        return res.status(400).send({
+            error: 'Invalid ID'
+        });
+    }
+
     UserModel.find({
             _id: req.body._id
         })
@@ -149,4 +171,13 @@ app.post('/dummyUsers', (req, res) => {
         });
 });
 
+const isValidID = (id) => {
+    if(!ObjectID.isValid(id)){
+        console.log('Not Valid ID');
+        return false;
+    }
+    return true;
+}
+
 module.exports.app = app;
+module.exports.isValidID = isValidID;
