@@ -13,6 +13,23 @@ app.listen(3000, () => {
     console.log('Started on port 3000');
 });
 
+app.get('/', (req, res) => {
+
+    setTimeout(() => {
+        res.send('Hello World!');
+    }, 1570);
+    
+});
+
+app.post('/check', (req, res) => {
+    res
+        .status(200)
+        .send({
+            key: 'key',
+            value: 'value'
+        });
+});
+
 app.post('/users', (req, res) => {
     
     console.log('req:', req.body);
@@ -41,11 +58,11 @@ app.post('/users', (req, res) => {
 app.post('/dummyUsers', (req, res) => {
     
     var user = new UserModel({
-        name: 'name',
-        age: 20,
-        title: 'title1',
-        address: 'address',
-        book: 'book1'
+        name : "User6",
+        age : 19,
+        title: "student6",
+        address: "young6",
+        book: "book6"
     });
 
     console.log('user:' , user);
