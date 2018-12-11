@@ -28,27 +28,25 @@ describe('POST /users', () => {
                 expect(res.body.address).toBe(user1.address);
                 console.log('res.body passed');
             })
+            .then(() => {
+                UserModel.find()
+                    .then( (users) => {
+                        console.log(users);
+                        done();
+                    })
+                    .catch( (err) => {
+                        return done(err);
+                    });
+            })
+            .catch((err) => {
+
+                if(err){
+                    console.log(err);
+                    return done(err);
+                }          
+            })
             .end(done());
 
-
-            // .end( (err, res) => {
-
-            //     if(err){
-            //         console.log(err);
-            //         return done(err);
-            //     }
-
-            //     UserModel.find()
-            //         .then( (users) => {
-            //             console.log(users);
-            //             expect(users).toContain(user1);
-            //             done();
-            //         })
-            //         .catch( (err) => {
-            //             done(err);
-            //         });            
-            //            })
-            
     });
 
 })
