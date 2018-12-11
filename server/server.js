@@ -7,10 +7,12 @@ const {moongose} = require('../db/mongoose');
 
 const app = express();
 
+const port = process.env.PORT || 3000;
+
 app.use(bodyParser.json())
 
-app.listen(3000, () => {
-    console.log('Started on port 3000');
+app.listen(port, () => {
+    console.log(`Started on port ${port}`);
 });
 
 app.get('/', (req, res) => {
@@ -27,6 +29,75 @@ app.post('/check', (req, res) => {
         .send({
             key: 'key',
             value: 'value'
+        });
+});
+
+app.get('/users', (req, res) => {
+    
+    UserModel.find()
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
+app.get('/users/:id', (req, res) => {
+    
+    UserModel.findById(req.params.id)
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
+app.get('/findById', (req, res) => {
+    
+    UserModel.findById(req.body._id)
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
+app.get('/findByName', (req, res) => {
+    
+    UserModel.find({
+            name: req.body.name
+        })
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
+        });
+});
+
+app.get('/userById', (req, res) => {
+    
+    UserModel.find({
+            _id: req.body._id
+        })
+        .then( (result) => {
+            console.log('found result:');
+            res.status(200).send(result);
+        })
+        .catch( (error) => {
+            console.log('found error:', error);
+            res.status(400).send(error);
         });
 });
 
@@ -58,11 +129,11 @@ app.post('/users', (req, res) => {
 app.post('/dummyUsers', (req, res) => {
     
     var user = new UserModel({
-        name : "User6",
-        age : 19,
-        title: "student6",
-        address: "young6",
-        book: "book6"
+        name : "User91",
+        age : 27,
+        title: "student91",
+        address: "young91",
+        book: "book91"
     });
 
     console.log('user:' , user);
